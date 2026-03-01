@@ -1,0 +1,29 @@
+{
+  "title": "배민, 1km 거리 제한 일부 지역 시행",
+  "keyword": "배달의민족",
+  "angle": "점주_피해",
+  "slides": [
+    {
+      "slide_num": 1,
+      "type": "cover",
+      "main_copy": "배달의민족 뉴스",
+      "sub_copy": "배민, 1km 거리 제한 일부 지역 시행...",
+      "color": "red/black"
+    },
+    {
+      "slide_num": 2,
+      "type": "problem",
+      "main_copy": "점주들이 왜 힘들까요?",
+      "sub_copy": "플랫폼 종속이 답입니다",
+      "color": "yellow"
+    },
+    {
+      "slide_num": 8,
+      "type": "cta",
+      "main_copy": "배달수수료 계산기",
+      "sub_copy": "내 마진 얼마나 깎이는지\n지금 바로 계산하세요",
+      "color": "blue",
+      "logo": "toss"
+    }
+  ]
+}

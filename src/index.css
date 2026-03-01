@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+/* 토스 스타일 커스텀 테마 */
+@theme {
+  --color-toss-blue: #3182f6;
+  --color-toss-blue-dark: #1b64da;
+  --color-toss-blue-light: #e8f3ff;
+  --color-toss-black: #191f28;
+  --color-toss-gray-50: #f9fafb;
+  --color-toss-gray-100: #f2f4f6;
+  --color-toss-gray-200: #e5e8eb;
+  --color-toss-gray-300: #d1d6db;
+  --color-toss-gray-400: #b0b8c1;
+  --color-toss-gray-500: #8b95a1;
+  --color-toss-gray-600: #6b7684;
+  --color-toss-gray-700: #4e5968;
+  --color-toss-gray-800: #333d4b;
+  --color-toss-gray-900: #191f28;
+  --color-toss-red: #f04452;
+  --color-toss-green: #30b06e;
+  --color-toss-orange: #f59e0b;
+  --color-baemin: #2ac1bc;
+  --color-coupang: #e6282e;
+  --color-yogiyo: #fa0050;
+  --color-ddanggyo: #4a90d9;
+}
+
+/* 기본 리셋 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+    "Pretendard", "Roboto", "Noto Sans KR", "Segoe UI", sans-serif;
+  background-color: #f2f4f6;
+  color: #191f28;
+  margin: 0;
+}
+
+/* 확대/축소 제스처 비활성화 (토스 앱인토스 요구사항) */
+html, body {
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}

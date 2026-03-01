@@ -1,0 +1,36 @@
+{
+  "title": "쿠팡이츠, 포장 주문 수수료 6.8% 논란",
+  "keyword": "쿠팡이츠",
+  "angle": "수수료_이슈",
+  "slides": [
+    {
+      "slide_num": 1,
+      "type": "cover",
+      "main_copy": "쿠팡이츠 뉴스",
+      "sub_copy": "쿠팡이츠, 포장 주문 수수료 6.8% 논란...",
+      "color": "red/black"
+    },
+    {
+      "slide_num": 2,
+      "type": "problem",
+      "main_copy": "또 수수료 올리나요?",
+      "sub_copy": "사장님 마진은 더 줄어듭니다",
+      "color": "yellow"
+    },
+    {
+      "slide_num": 3,
+      "type": "calculation",
+      "main_copy": "주문 2만원 기준\n현실 계산",
+      "sub_copy": "플랫폼 수수료 6.8%~9.8%\n실수령 90% 미만",
+      "color": "red"
+    },
+    {
+      "slide_num": 8,
+      "type": "cta",
+      "main_copy": "배달수수료 계산기",
+      "sub_copy": "내 마진 얼마나 깎이는지\n지금 바로 계산하세요",
+      "color": "blue",
+      "logo": "toss"
+    }
+  ]
+}
