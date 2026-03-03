@@ -1,14 +1,14 @@
 const Header = () => (
   <>
     {/* 내비게이션 바 — 브랜드 로고 포함 */}
-    <nav className="bg-white px-4 py-3 border-b border-toss-gray-200 sticky top-0 z-50">
-      <div className="max-w-lg mx-auto flex items-center gap-2.5">
+    <nav className="bg-white px-4 py-3.5 border-b border-toss-gray-200 sticky top-0 z-50">
+      <div className="max-w-lg mx-auto flex items-center gap-3">
         <img
           src="/logo_final.png"
-          alt="배달 수수료 계산기"
-          className="w-7 h-7 rounded-lg"
+          alt="배달 수수료 계산기 로고"
+          className="w-9 h-9 rounded-xl shadow-sm"
         />
-        <span className="text-[16px] font-bold text-toss-gray-900">
+        <span className="text-[17px] font-extrabold text-toss-gray-900 tracking-tight">
           배달 수수료 계산기
         </span>
       </div>

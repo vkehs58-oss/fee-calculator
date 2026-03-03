@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { RegionId } from '../types';
 import { platforms } from '../data/platforms';
 import { formatWon } from '../utils/calculator';
@@ -63,6 +63,8 @@ const MonthlySettlement = () => {
   const savedData = loadSavedData();
   const [region, setRegion] = useState<RegionId>(savedData.region);
   const [inputs, setInputs] = useState<Record<string, PlatformInput>>(savedData.inputs);
+  const summaryRef = useRef<HTMLDivElement>(null);
+  const [showSticky, setShowSticky] = useState(false);
 
   // localStorage에 저장
   useEffect(() => {
@@ -135,7 +137,7 @@ const MonthlySettlement = () => {
     const vatBase = commissionFee + deliveryFee + pgFee;
     const vat = Math.round(vatBase * (platform.vatRate / 100));
 
-    const totalFee = commissionFee + deliveryFee + pgFee + vat + adCost;
+    const totalFee = commissionFee + deliveryFee + pgFee + vat + adCost + discountAmount;
     const expectedDeposit = orderAmount - totalFee;
 
     return {
@@ -174,13 +176,45 @@ const MonthlySettlement = () => {
     (input) => input.orderAmount !== '' || input.orderCount !== ''
   );
 
+  const hasResults = hasAnyInput && results.length > 0;
+
+  useEffect(() => {
+    const el = summaryRef.current;
+    if (!el || !hasResults) {
+      setShowSticky(false);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowSticky(!entry.isIntersecting),
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasResults]);
+
   return (
+    <>
     <div className="bg-white rounded-2xl mx-4 mt-6 overflow-hidden shadow-sm">
       <div className="px-5 py-4 border-b border-toss-gray-100">
-        <h3 className="text-[17px] font-bold text-toss-gray-900 flex items-center gap-2">
-          <span>📊</span>
-          <span>월말 정산</span>
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-[17px] font-bold text-toss-gray-900 flex items-center gap-2">
+            <span>📊</span>
+            <span>월말 정산</span>
+          </h3>
+          {hasAnyInput && (
+            <button
+              onClick={() => {
+                if (window.confirm('입력값을 모두 초기화할까요?')) {
+                  setInputs(DEFAULT_INPUTS);
+                  setExpanded(false);
+                }
+              }}
+              className="text-[12px] text-toss-gray-400 underline decoration-toss-gray-300"
+            >
+              초기화
+            </button>
+          )}
+        </div>
         <p className="text-[12px] text-toss-gray-400 mt-1">
           이번 달 실제 주문 데이터를 입력하면 플랫폼별 수수료를 계산해드려요
         </p>
@@ -262,26 +296,24 @@ const MonthlySettlement = () => {
               )}
 
               {/* 고객할인비용 & 광고비 */}
-              {hasInput && (
-                <div className="grid grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="고객할인비용 (원)"
-                    value={input.discountAmount}
-                    onChange={(e) => handleInputChange(platform.id, 'discountAmount', e.target.value)}
-                    className="px-3 py-2 text-[13px] border border-toss-gray-150 rounded-xl bg-toss-gray-50 focus:outline-none focus:ring-2 focus:ring-toss-blue focus:ring-opacity-50"
-                  />
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="광고비 (원)"
-                    value={input.adCost}
-                    onChange={(e) => handleInputChange(platform.id, 'adCost', e.target.value)}
-                    className="px-3 py-2 text-[13px] border border-toss-gray-150 rounded-xl bg-toss-gray-50 focus:outline-none focus:ring-2 focus:ring-toss-blue focus:ring-opacity-50"
-                  />
-                </div>
-              )}
+              <div className="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="고객할인비용 (원)"
+                  value={input.discountAmount}
+                  onChange={(e) => handleInputChange(platform.id, 'discountAmount', e.target.value)}
+                  className="px-3 py-2 text-[13px] border border-toss-gray-150 rounded-xl bg-toss-gray-50 focus:outline-none focus:ring-2 focus:ring-toss-blue focus:ring-opacity-50"
+                />
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  placeholder="광고비 (원)"
+                  value={input.adCost}
+                  onChange={(e) => handleInputChange(platform.id, 'adCost', e.target.value)}
+                  className="px-3 py-2 text-[13px] border border-toss-gray-150 rounded-xl bg-toss-gray-50 focus:outline-none focus:ring-2 focus:ring-toss-blue focus:ring-opacity-50"
+                />
+              </div>
             </div>
           );
         })}
@@ -381,7 +413,7 @@ const MonthlySettlement = () => {
             </div>
           )}
 
-          <div className="bg-gradient-to-br from-toss-blue/10 to-toss-blue/5 px-5 py-5 border-t border-toss-gray-100">
+          <div ref={summaryRef} className="bg-gradient-to-br from-toss-blue/10 to-toss-blue/5 px-5 py-5 border-t border-toss-gray-100">
             <div className="space-y-2.5">
               <div className="flex justify-between items-center">
                 <span className="text-[14px] text-toss-gray-700">총 매출</span>
@@ -407,21 +439,25 @@ const MonthlySettlement = () => {
             </div>
           </div>
 
-          {/* 초기화 버튼 */}
-          <div className="px-5 py-3 border-t border-toss-gray-100">
-            <button
-              onClick={() => {
-                setInputs(DEFAULT_INPUTS);
-                setExpanded(false);
-              }}
-              className="w-full py-2.5 rounded-xl text-[13px] font-medium text-toss-gray-500 bg-toss-gray-50 hover:bg-toss-gray-100 active:bg-toss-gray-200 transition-colors"
-            >
-              입력값 초기화
-            </button>
-          </div>
         </>
       )}
     </div>
+
+    {/* 스티키 요약바 */}
+    {showSticky && hasResults && (
+      <div className="fixed bottom-0 left-0 right-0 z-50">
+        <div className="max-w-lg mx-auto px-4 pb-3">
+          <div className="px-4 py-3 bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-toss-gray-200 flex justify-between items-center">
+            <div>
+              <div className="text-[13px] font-bold text-toss-gray-700">총 순수익</div>
+              <div className="text-[11px] text-toss-gray-400">수수료율 {actualFeeRate.toFixed(1)}%</div>
+            </div>
+            <div className="text-[20px] font-extrabold text-toss-blue tracking-[-0.5px]">{formatWon(totalProfit)}</div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 
